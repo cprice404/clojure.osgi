@@ -8,6 +8,10 @@
 (def ^:dynamic *bundle* nil)
 (def ^:dynamic *clojure-osgi-bundle*)
 
+(defmethod print-dup Bundle [d out]
+        (.write out
+                (str `(d (.toString)))))
+
 (defn bundle-for-ns [ns]
   (let [ns-meta (meta ns)]
     (and ns-meta (::bundle ns-meta))))
