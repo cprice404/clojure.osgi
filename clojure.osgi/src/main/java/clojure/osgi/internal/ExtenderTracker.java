@@ -17,7 +17,10 @@ import clojure.lang.Var;
 import clojure.osgi.RunnableWithException;
 
 public class ExtenderTracker extends BundleTracker {
-	private Set<Long> requireProcessed = new HashSet<Long>();
+    private static final String OSGI_HEADER_CLOJURE_REQUIRE_NAMESPACE = "Clojure-Require";
+    private static final String OSGI_HEADER_CLOJURE_ACTIVATOR_NAMESPACE = "Clojure-ActivatorNamespace";
+
+    private Set<Long> requireProcessed = new HashSet<Long>();
 	private Set<Long> active = new HashSet<Long>();
 	private ServiceTracker logTracker;
 	private LogService log = new StreamLog(System.out);
@@ -50,7 +53,8 @@ public class ExtenderTracker extends BundleTracker {
 
 	public Object addingBundle(Bundle bundle, BundleEvent event) {
 		if (!requireProcessed.contains(bundle.getBundleId())) {
-			processRequire(bundle);
+			processRequire(bundle, OSGI_HEADER_CLOJURE_REQUIRE_NAMESPACE);
+            processRequire(bundle, OSGI_HEADER_CLOJURE_ACTIVATOR_NAMESPACE);
 			requireProcessed.add(bundle.getBundleId());
 		}
 
@@ -75,8 +79,9 @@ public class ExtenderTracker extends BundleTracker {
 		return null;
 	}
 
-	private void processRequire(Bundle bundle) {
-		String header = (String) bundle.getHeaders().get("Clojure-Require");
+	private void processRequire(Bundle bundle, String headerName) {
+		String header = (String) bundle.getHeaders().get(headerName);
+
 
 		if (header != null) {
 			StringTokenizer lib = new StringTokenizer(header, ",");
@@ -107,9 +112,9 @@ public class ExtenderTracker extends BundleTracker {
 	}
 
 	private void invokeActivatorCallback(CallbackType callback,
-			final Bundle bundle) {
+                                         final Bundle bundle) {
 		final String ns = (String) bundle.getHeaders().get(
-				"Clojure-ActivatorNamespace");
+                OSGI_HEADER_CLOJURE_ACTIVATOR_NAMESPACE);
 		if (ns != null) {
 			final String callbackFunction = callbackFunctionName(callback, ns);
 			final Var var = RT.var(ns, callbackFunction);

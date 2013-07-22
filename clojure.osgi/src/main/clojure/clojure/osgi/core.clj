@@ -3,7 +3,7 @@
   (:import [clojure.osgi BundleClassLoader IClojureOSGi RunnableWithException])
   (:import [clojure.lang Namespace]))
 
-(def ^{:private true} osgi-debug false)
+(def ^{:private true} osgi-debug true)
 
 (def ^:dynamic *bundle* nil)
 (def ^:dynamic *clojure-osgi-bundle*)
@@ -185,6 +185,8 @@
         bundle (or forced-bundle *bundle*)]
     (when (and osgi-debug forced-bundle)
       (println (str "marker for " lib " specifies non-default bundle " bundle)))
+    (when osgi-debug
+      (println "CHECKING AVAILABILITY; BUNDLE: " bundle))
     (when (or
            (let [cname (str (namespace-munge lib) "__init")]
              (when osgi-debug (println "trying to load as a class"))

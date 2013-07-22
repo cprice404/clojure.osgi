@@ -5,7 +5,7 @@
 	<groupId>com.rmoquin.bundle</groupId>
 	<artifactId>clojure.osgi</artifactId>
 	<packaging>jar</packaging>
-	<version>1.4.0</version>
+	<version>1.4.1-SNAPSHOT</version>
 	<name>ClojureOSGI</name>
   <distributionManagement>
     <repository>
@@ -22,13 +22,13 @@
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
 			<version>4.3.1</version>
-			<scope>provided</scope>
+			<!--<scope>provided</scope>-->
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.compendium</artifactId>
 			<version>4.3.1</version>
-			<scope>provided</scope>
+			<!--<scope>provided</scope>-->
 		</dependency>
 		<dependency>
 			<groupId>com.rmoquin.bundle</groupId>
